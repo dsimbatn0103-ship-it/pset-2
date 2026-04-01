@@ -1,0 +1,47 @@
+services:
+
+  # ── Base de datos principal ──────────────────────────────────────────────
+  data-warehouse:
+    image: postgres:13
+    env_file: .env
+    environment:
+      POSTGRES_USER:     ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB:       ${POSTGRES_DB}
+    volumes:
+      - warehouse-volume:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 5
+      start_period: 5s
+
+  # ingesta-datos:
+  #   image: ingesta-datos
+  #   build: .
+  #   depends_on:
+  #     data-warehouse:
+  #       condition: service_healthy
+  
+  # ── Interfaz web para PostgreSQL ────────────────────────────────────────
+  warehouse-ui:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=enaunay@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - "9000:80"
+  
+  # ── Interfaz web para Orquestador Mage ────────────────────────────────────
+  orquestador:
+    image: mageai/mageai
+    volumes:
+      - ./data-orquestador:/home/src
+    ports:
+      - "6789:6789"
+    command: /app/run_app.sh mage start orquestador
+volumes:
+  warehouse-volume:

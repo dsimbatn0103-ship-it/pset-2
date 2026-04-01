@@ -83,12 +83,12 @@ default:
   PINOT_USER: user
   # PostgresSQL
   POSTGRES_CONNECT_TIMEOUT: 10
-  POSTGRES_DBNAME: {{ mage_secret_var('pg_db') }}
+  POSTGRES_DBNAME: "{{ mage_secret_var('pg_db') }}"
   POSTGRES_SCHEMA: public # Optional
-  POSTGRES_USER: {{ mage_secret_var('pg_user') }}
-  POSTGRES_PASSWORD: {{ mage_secret_var('pg_password') }}
-  POSTGRES_HOST: {{ mage_secret_var('pg_host') }}
-  POSTGRES_PORT: {{ mage_secret_var('pg_port') }}
+  POSTGRES_USER: "{{ mage_secret_var('pg_user') }}"
+  POSTGRES_PASSWORD: "{{ mage_secret_var('pg_password') }}"
+  POSTGRES_HOST: "{{ mage_secret_var('pg_host') }}"
+  POSTGRES_PORT: "{{ mage_secret_var('pg_port') }}"
   # Qdrant
   QDRANT_COLLECTION: collection
   QDRANT_PATH: path

@@ -1,0 +1,74 @@
+blocks:
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - transform_and_load_fact
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: build_dimensions
+  retry_config: null
+  status: executed
+  timeout: null
+  type: data_loader
+  upstream_blocks: []
+  uuid: build_dimensions
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - validate_clean_model
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: transform_and_load_fact
+  retry_config: null
+  status: executed
+  timeout: null
+  type: transformer
+  upstream_blocks:
+  - build_dimensions
+  uuid: transform_and_load_fact
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: validate_clean_model
+  retry_config: null
+  status: updated
+  timeout: null
+  type: data_exporter
+  upstream_blocks:
+  - transform_and_load_fact
+  uuid: validate_clean_model
+cache_block_output_in_memory: false
+callbacks: []
+concurrency_config: {}
+conditionals: []
+created_at: '2026-03-31 22:44:48.327203+00:00'
+data_integration: null
+description: 'transforma raw → clean con el modelo dimensional. '
+executor_config: {}
+executor_count: 1
+executor_type: null
+extensions: {}
+name: clean_transformation_pipeline
+notification_config: {}
+remote_variables_dir: null
+retry_config: {}
+run_pipeline_in_one_process: false
+settings:
+  triggers: null
+spark_config: {}
+tags: []
+type: python
+uuid: clean_transformation_pipeline
+variables_dir: /home/src/mage_data/orquestador
+widgets: []

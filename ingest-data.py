@@ -6,7 +6,9 @@ import traceback
 
 def main():
     #Conexión a PostgreSQL
-    conexion = sqlalchemy.create_engine('postgresql://root:root@pset-2-data-warehouse-1:5432/warehouse')
+    conexion = sqlalchemy.create_engine(
+        'postgresql://root:root@pset-2-data-warehouse-1:5432/warehouse'
+    )
 
     # Definir las fechas de inicio y fin
     start_year = 2023
@@ -16,29 +18,6 @@ def main():
 
     # Tamaño de chunk
     tamano = 100000
-    tabla_creada = False
-
-    columnas_base = [
-        "VendorID",
-        "tpep_pickup_datetime",
-        "tpep_dropoff_datetime",
-        "passenger_count",
-        "trip_distance",
-        "RatecodeID",
-        "store_and_fwd_flag",
-        "PULocationID",
-        "DOLocationID",
-        "payment_type",
-        "fare_amount",
-        "extra",
-        "mta_tax",
-        "tip_amount",
-        "tolls_amount",
-        "improvement_surcharge",
-        "total_amount",
-        "congestion_surcharge",
-        "Airport_fee"  # clave del problema
-    ]
 
     for year in range(start_year, end_year + 1):
         for month in range(1, 13):
@@ -49,32 +28,26 @@ def main():
             print(f"\nDescargando datos: {year}-{month:02d}")
             
             try:
+                # EXTRACT (sin alterar)
                 datos_crudos = pd.read_parquet(URL)
 
                 print(f"Filas descargadas: {datos_crudos.shape[0]}")
+                
+                # Nombre dinámico de tabla RAW (una por mes)
+                nombre_tabla = f"raw_viajes_taxi_{year}_{month:02d}"
 
-                # NORMALIZAR COLUMNAS
-                for col in columnas_base:
-                    if col not in datos_crudos.columns:
-                        datos_crudos[col] = None
+                # Crear tabla automáticamente según esquema del mes
+                print(f"Creando tabla {nombre_tabla} en PostgreSQL...")
 
-                # Reordenar columnas
-                datos_crudos = datos_crudos[columnas_base]
-
-                # Crear tabla SOLO una vez
-                if not tabla_creada:
-                    print("Creando tabla en PostgreSQL...")
-                    datos_crudos.head(0).to_sql(
-                        name='viajes_taxi_amarillo',
-                        con=conexion,
-                        if_exists='replace',
-                        index=False
-                    )
-                    tabla_creada = True
+                datos_crudos.head(0).to_sql(
+                    name='viajes_taxi_amarillo',
+                    con=conexion,
+                    if_exists='replace',
+                    index=False
+                )
 
                 # Calcular chunks
                 num_chunks = math.ceil(len(datos_crudos) / tamano)
-
                 print(f"Iniciando carga en chunks ({num_chunks} bloques)...")
 
                 for i in tqdm(range(num_chunks)):
