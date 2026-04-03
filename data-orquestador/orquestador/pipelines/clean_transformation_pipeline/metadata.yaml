@@ -42,7 +42,7 @@ blocks:
   language: python
   name: validate_clean_model
   retry_config: null
-  status: updated
+  status: executed
   timeout: null
   type: data_exporter
   upstream_blocks:
