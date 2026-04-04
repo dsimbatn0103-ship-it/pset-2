@@ -74,8 +74,8 @@ pset2_ny_taxi/
 ├── data-ui-volume/              ← Volumen de pgAdmin (configuración persistente)
 │
 ├── notebooks/
-│   ├── validaciones_pset2.ipynb ← Validaciones exploratorias
-│   └── alternativa_sql.sql      ← Alternativa SQL pura para pgAdmin
+│   ├── eda.ipynb ← Validaciones exploratorias
+│ 
 │
 ├── docs/
 │   └── architecture_diagram.png
